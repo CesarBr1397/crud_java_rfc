@@ -1,6 +1,7 @@
 package com.rfc.crud_rfc.service;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,17 +30,21 @@ public class RfcService {
         List<Character> consonantes = Arrays.asList('B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
                 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z');
 
+
+        //Validar si el Apellido Paterno comienza con  Ñ
         String apellidoPa = rfc.getApellidoPa().toUpperCase();
         if (apellidoPa.startsWith("Ñ")) {
             apellidoPa = apellidoPa.replace("Ñ", "X");
         }
 
+        //Validar si el apellido la segunda letra es vocal o consonante
         if (vocales.contains(apellidoPa.charAt(1))) {
             apellidoPa = apellidoPa.substring(0, 2);
         } else {
             apellidoPa = apellidoPa.substring(0, 1) + apellidoPa.charAt(2);
         }
 
+        //Validar si la tercera letra es vocal o consonante
         if (consonantes.contains(apellidoPa.charAt(1))) {
             apellidoPa = apellidoPa.substring(0, 1) + "X";
         }
@@ -48,18 +53,21 @@ public class RfcService {
 
         String nombre = rfc.getNombre().substring(0, 1).toUpperCase();
 
+        //validar si el primer nombre es un nombre comun
         for (String nombreComun : nombresComunes) {
-            if (rfc.getNombre().toUpperCase().startsWith(nombreComun)) {
-                String[] nombresSeparados = rfc.getNombre().split(" ");
+            String[] nombresSeparados = rfc.getNombre().toUpperCase().split(" ");
+            if (nombresSeparados[0].equals(nombreComun)) {
                 if (nombresSeparados.length > 1) {
-                    nombre = nombresSeparados[1].substring(0, 1).toUpperCase();
+                    nombre = nombresSeparados[1].substring(0, 1);
                 }
                 break;
             }
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        String fechaNac = sdf.format(rfc.getFechaNac());
+        LocalDate fecha = rfc.getFechaNac();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        String fechaNac = fecha.format(formatter);
+
 
         String rfcCreado = apellidoPa + apellidoMa + nombre;
 
@@ -84,7 +92,7 @@ public class RfcService {
 
     public rfc ObtenerId(Long id) {
         Optional<rfc> optionalRfc = rfcRepository.findById(id);
-        return optionalRfc.orElse(null); // Devuelve null si no se encuentra
+        return optionalRfc.orElse(null);
     }
 
     public rfc Actualizar(Long id, rfc rfcActualizado) {

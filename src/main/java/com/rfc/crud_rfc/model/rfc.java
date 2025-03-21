@@ -1,9 +1,6 @@
 package com.rfc.crud_rfc.model;
 
-import java.sql.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,12 +20,12 @@ public class rfc {
 
     private String apellidoMa;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date fechaNac;
+
+    private LocalDate fechaNac;
 
     private String rfc;
 
-    public rfc(Long idUsuario, String nombre, String apellidoPa, String apellidoMa, Date fechaNac, String rFC) {
+    public rfc(Long idUsuario, String nombre, String apellidoPa, String apellidoMa, LocalDate fechaNac, String rFC) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellidoPa = apellidoPa;
@@ -72,11 +69,11 @@ public class rfc {
         this.apellidoMa = apellidoMa;
     }
 
-    public Date getFechaNac() {
+    public LocalDate getFechaNac() {
         return fechaNac;
     }
 
-    public void setFechaNac(Date fechaNac) {
+    public void setFechaNac(LocalDate fechaNac) {
         this.fechaNac = fechaNac;
     }
 
